@@ -3,17 +3,19 @@ package fr.funetdelire.webftp.server;
 import java.io.IOException;
 import java.net.URI;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 public class Server implements Cloneable {
 
 	private String root;
-	@NotNull
+	@NotBlank
 	private String host;
-	@NotNull
+	@NotBlank
 	private String login;
-	@NotNull
+	@NotBlank
 	private String password;
+	@Positive
 	private int port;
 	private boolean passive;
 
