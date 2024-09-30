@@ -1,11 +1,11 @@
 :root {
-  font-family: sans-serif;
+  font-family: 'Trebuchet MS';
   line-height: 1.5;
   font-weight: 400;
 
-  --bg-color: #242424;
-  --primary-color: #27293d;
-  --accent-color: rgb(83, 78, 108);
+  --bg-color: #8499b1;
+  --primary-color: #171619;
+  --accent-color: #7b6d8d;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);

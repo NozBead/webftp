@@ -6,13 +6,11 @@ export class Server {
   password: string = ''
 }
 
-interface RemoteFile {
+export interface RemoteFile {
   name: string
-  host: string
-  port: number
-  root: string | undefined
-  username: string
-  password: string
+  type: number
+  size: number
+  timestamp: string
 }
 
 export class FileServers {
@@ -41,11 +39,12 @@ export class FileServers {
     return new Map(Object.entries(await response.json()))
   }
 
-  listFiles(server: string, path: string) {
-    fetch(`${this.baseUrl}/server/${server}/${path}`, {
+  async listFiles(server: string, path: string): Promise<Array<RemoteFile>> {
+    const response = await fetch(`${this.baseUrl}/server/${server}/${path}`, {
       headers: {
         Accept: 'application/json'
       }
     })
+    return await response.json()
   }
 }

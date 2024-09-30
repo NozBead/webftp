@@ -3,6 +3,10 @@ import DynLabelInput from './DynLabelInput.vue'
 import { Server, FileServers } from '../servers/FileServers'
 import { ref, useTemplateRef } from 'vue'
 
+defineEmits<{
+  serverSelected: [server: string]
+}>()
+
 const api = new FileServers('http://localhost:8080')
 
 const servers = ref<Map<string, Server>>()
@@ -49,11 +53,8 @@ function serverToForm(inputs: HTMLFormControlsCollection, server: Server, name?:
   return server as Server
 }
 
-function openServerDialog(server?: Server, name?: string) {
+function openServerDialog(server: Server = new Server(), name?: string) {
   const inputs = serverForm.value?.elements as HTMLFormControlsCollection
-  if (server == undefined) {
-    server = new Server()
-  }
   serverToForm(inputs, server, name)
   serverDialog.value?.showModal()
 }
@@ -100,16 +101,28 @@ function openServerDialog(server?: Server, name?: string) {
       </div>
     </form>
   </dialog>
-  <ul id="list">
-    <li @dblclick="openServerDialog(server, name)" v-for="[name, server] in servers">{{ name }}</li>
-  </ul>
-  <div id="add" @click="openServerDialog()">+</div>
+  <div id="list">
+    <ul>
+      <li
+        @click="$emit('serverSelected', name)"
+        @dblclick="openServerDialog(server, name)"
+        v-for="[name, server] in servers"
+      >
+        {{ name }}
+      </li>
+      <li id="add" @click="openServerDialog()">
+        <b><span>+</span> Add server...</b>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
 dialog {
+  border: none;
+  border-radius: 20px;
   background-color: var(--primary-color);
-  padding: 0 1rem 0 1rem;
+  padding: 2rem 5rem;
   form {
     display: flex;
     flex-direction: column;
@@ -140,17 +153,25 @@ dialog {
   }
 }
 
-#add {
-  flex-shrink: 0;
+#list {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 100%;
-  font-weight: bold;
-  font-size: 2rem;
-  width: 3rem;
-  height: 3rem;
-  box-shadow: 0 0 12px hsla(0, 0%, 0%, 0.5);
+  padding: 1rem;
+  width: 15rem;
+  font-size: 1.2rem;
+  flex-shrink: 0;
   background-color: var(--primary-color);
+
+  ul {
+    padding: 0;
+    list-style: none;
+    #add {
+      cursor: pointer;
+      span {
+        font-size: 1.5rem;
+      }
+    }
+  }
 }
 </style>
